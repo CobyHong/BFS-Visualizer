@@ -144,13 +144,16 @@ async function doPath()
     let queue = new queueUsingLL();
     queue.enqueue( [start[0], start[1], [start] ] );
 
+    var cells = document.getElementsByClassName("cell");
+    var vals = document.getElementsByClassName("cell_value");
+
     while (!queue.isEmpty())
     {
         var pos = queue.dequeue();
 
         var idx = grid_to_cell(pos[0],pos[1]);
-        var cell = document.getElementById(idx);
-        var val = cell.getElementsByClassName("cell_value")[0];
+        var cell = cells[idx];
+        var val = vals[idx];
 
         // marking visisted logic.
         val.innerHTML = 'v';
@@ -173,8 +176,8 @@ async function doPath()
             if ( is_tile(move[0], move[1]) )
             {
                 var idx = grid_to_cell(move[0],move[1]);
-                var cell = document.getElementById(idx);
-                var val = cell.getElementsByClassName("cell_value")[0];
+                var cell = cells[idx];
+                var val = vals[idx];
 
                 if ( (move[0] == end[0]) && (move[1] == end[1]) )
                 {
