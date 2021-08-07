@@ -144,6 +144,9 @@ async function doPath()
     let queue = new queueUsingLL();
     queue.enqueue( [start[0], start[1], [start] ] );
 
+    let v = new Set();
+    v.add(start[0].toString().concat(start[1].toString()));
+
     var cells = document.getElementsByClassName("cell");
     var vals = document.getElementsByClassName("cell_value");
 
@@ -161,14 +164,16 @@ async function doPath()
         {
             cell.style.background = "lightblue";
         }
-        await sleep(0);
-    
-        var poss_moves = [
-            [pos[0], pos[1]+1],
-            [pos[0]+1, pos[1]],
-            [pos[0], pos[1]-1],
-            [pos[0]-1, pos[1]],
-        ]
+        await sleep(50);
+   
+        var poss_moves =
+        [
+            [pos[0], pos[1]+1, dist(pos[0], pos[1]+1, end[0], end[1])],
+            [pos[0]+1, pos[1], dist(pos[0]+1, pos[1], end[0], end[1])],
+            [pos[0], pos[1]-1, dist(pos[0], pos[1]-1, end[0], end[1])],
+            [pos[0]-1, pos[1], dist(pos[0]-1, pos[1], end[0], end[1])],
+        ];
+        poss_moves.sort(sortFunction);
 
         for (var i=0; i<poss_moves.length; i++)
         {
@@ -189,8 +194,11 @@ async function doPath()
                     return 1;
                 }
 
-                if ( (val.innerHTML != 'v') && (cell.style.background != "lightblue") )
+                var key = move[0].toString().concat(move[1].toString());
+                if ( !v.has(key) )
                 {
+                	  v.add(key);
+
                     var next_move = [move[0], move[1], [...pos[2], [move[0],move[1]] ] ];
                     queue.enqueue( next_move );
                 }
@@ -268,7 +276,7 @@ async function createLine(path)
         }
         cell.style.border = "3px solid rgb(175, 175, 175)";
         steps += 1;
-        await sleep(50);
+        await sleep(100);
     }
 } 
 
