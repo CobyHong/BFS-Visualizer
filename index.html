@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>cell shit</title>
+        <title>BFS Visualizer</title>
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,14 +15,30 @@
     </head>
 
     <body onload="generateGrid()">
+        <div style="margin-left: 2%;">
+            <h2 >BFS Interactive Visualizer</h2>
+        </div>
+
 
         <div id="grid" class="grid"></div>
 
-        <p style="margin: 2%; margin-top: 5%;">
-            <input id = "get_grid" type = "submit" value="Verify Grid">
-            <input id = "do_reset" type = "submit" value="Rest Grid">
-            <input id = "do_path" type = "submit" value="Run Pathing">
-        </p>
+        <div style=" width: 500px; height: 500px; margin: 2%; margin-top: 3%;">
+            <div style="margin: auto;">
+                <input id = "get_grid" type = "submit" value="Verify Grid">
+                <input id = "do_reset" type = "submit" value="Rest Grid">
+                <input id = "do_path" type = "submit" value="Run Pathing">
+            </div>
+            <h4 style="margin-bottom: 5%; margin-top: 5%;">Made by: Coby Hong 👲👋</h4>
+            <p>
+                <span style="color:rgb(144, 238, 144); font-weight: 1000;">Green</span> = start,
+                <span style="color:rgb(255, 127, 127); font-weight: 1000;">Red</span> = end,
+                <span style="color:rgb(112, 112, 112); font-weight: 1000;">Dark Grey</span> = obstacle.
+            </p>
+            <p>1. Create your grid (must have one start and one end).</p>
+            <p>2. Click Verify Grid. This will save your grid.</p>
+            <p>3. Click Run Pathing.</p>
+
+        </div>
 
         <script src = "script.js"></script>
     </body>
