@@ -141,15 +141,18 @@ async function doPath()
     var end = S_E[1];
 
 
-    let queue = new queueUsingLL();
-    queue.enqueue( [start[0], start[1], [start] ] );
+    let queue = [];
+    queue.push( [start[0], start[1], [start] ] );
+
+    let v = new Set();
+    v.add(start[0].toString().concat(start[1].toString()));
 
     var cells = document.getElementsByClassName("cell");
     var vals = document.getElementsByClassName("cell_value");
 
-    while (!queue.isEmpty())
+    while (queue.length != 0)
     {
-        var pos = queue.dequeue();
+        var pos = queue.shift();
 
         var idx = grid_to_cell(pos[0],pos[1]);
         var cell = cells[idx];
@@ -161,14 +164,16 @@ async function doPath()
         {
             cell.style.background = "lightblue";
         }
-        await sleep(0);
-    
-        var poss_moves = [
-            [pos[0], pos[1]+1],
-            [pos[0]+1, pos[1]],
-            [pos[0], pos[1]-1],
-            [pos[0]-1, pos[1]],
-        ]
+        await sleep(50);
+   
+        var poss_moves =
+        [
+            [pos[0], pos[1]+1, dist(pos[0], pos[1]+1, end[0], end[1])],
+            [pos[0]+1, pos[1], dist(pos[0]+1, pos[1], end[0], end[1])],
+            [pos[0], pos[1]-1, dist(pos[0], pos[1]-1, end[0], end[1])],
+            [pos[0]-1, pos[1], dist(pos[0]-1, pos[1], end[0], end[1])],
+        ];
+        poss_moves.sort(sortFunction);
 
         for (var i=0; i<poss_moves.length; i++)
         {
@@ -189,10 +194,13 @@ async function doPath()
                     return 1;
                 }
 
-                if ( (val.innerHTML != 'v') && (cell.style.background != "lightblue") )
+                var key = move[0].toString().concat(move[1].toString());
+                if ( !v.has(key) )
                 {
+                	  v.add(key);
+
                     var next_move = [move[0], move[1], [...pos[2], [move[0],move[1]] ] ];
-                    queue.enqueue( next_move );
+                    queue.push( next_move );
                 }
             }
         }
@@ -268,7 +276,7 @@ async function createLine(path)
         }
         cell.style.border = "3px solid rgb(175, 175, 175)";
         steps += 1;
-        await sleep(50);
+        await sleep(100);
     }
 } 
 
@@ -307,120 +315,4 @@ const is_tile = (i, j) =>
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-
-
-//   ===============================================================
-
-//Queue using linkedlist
-function queueUsingLL(){
-    //Node 
-    let Node = function(elm){
-      this.element = elm;
-      this.next = null;
-    }
-    
-    //To keep track of the size  
-    let length = 0;
-    
-    //To keep track of the list
-    let head = null;
-    
-    //Enqueue data in the queue
-    this.enqueue = function(elm){
-      let node = new Node(elm),
-      current;
-    
-      //If head is empty then 
-      //Add the node at the beginning
-      if(head === null){
-        head = node;
-      }else{
-        //Else add the node as the
-        //Next element of the existing list
-        current = head;
-        while(current.next){
-          current = current.next;
-        }
-  
-        current.next = node;
-      }
-  
-      //Increase the length
-      length++;
-    }
-    
-    //Remove the item from the queue
-    this.dequeue = function(){
-      let current = head;
-      
-      //If there is item then remove it 
-      //and make the next element as the first
-      if(current){
-        let elm = current.element;
-        current = current.next;
-        head = current;
-        length--;
-        return elm;
-      }
-      
-      return null;   
-    }
-    
-    //Return the first element in the queue
-    this.front = function(){    
-      if(head){    
-        return head.element;
-      }
-  
-      return null;
-    }
-    
-    //Return the last element in the queue
-    this.rear = function(){    
-      let current = head;
-      
-      //If head is empty
-      //Return null
-      if(current === null){
-        return null;
-      }
-      
-      //Return the last elememnt
-      while(current.next){
-        current = current.next;
-      }
-  
-      return current.element;
-    }
-    
-    //Convert the queue to an array
-    this.toArray = function(){
-      let arr = [];
-      let current = head;
-      while(current){
-        arr.push(current.element);
-        current = current.next;
-      }
-      
-      return arr;
-    }
-    
-    //Check if queue is empty
-    this.isEmpty = function(){
-      return length === 0;
-    }
-    
-    //Return the size of the queue
-    this.size = function(){
-      return length;
-    }
-    
-    //Clear the queue
-    this.clear = function(){
-      head = null;
-      length = 0;
-    }
-    
-  }
+}
