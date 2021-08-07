@@ -147,6 +147,9 @@ async function doPath()
     let v = new Set();
     v.add(start[0].toString().concat(start[1].toString()));
 
+    let v = new Set();
+    v.add(start[0].toString().concat(start[1].toString()));
+
     var cells = document.getElementsByClassName("cell");
     var vals = document.getElementsByClassName("cell_value");
 
